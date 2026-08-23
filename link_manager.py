@@ -29,7 +29,8 @@ def update_github_gist(gist_id: str, github_token: str, new_link: str) -> dict:
     headers = {
         "Accept": "application/vnd.github+json",
         "Authorization": f"Bearer {github_token}",
-        "X-GitHub-Api-Version": "2022-11-28"
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "CampaignGuard-Agent"
     }
     data = {
         "description": "Active Campaign Link",
@@ -41,10 +42,28 @@ def update_github_gist(gist_id: str, github_token: str, new_link: str) -> dict:
     req = urllib.request.Request(api_url, data=json.dumps(data).encode('utf-8'), headers=headers, method='PATCH')
     try:
         with urllib.request.urlopen(req, timeout=10) as response:
-            if response.getcode() == 200:
-                return {"success": True, "message": "Live Gist overwritten successfully."}
+            status = response.getcode()
+            return {
+                "success": status == 200,
+                "status_code": status,
+                "gist_id": gist_id,
+                "message": "Live Gist overwritten successfully."
+            }
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode('utf-8', errors='ignore')
+        return {
+            "success": False,
+            "status_code": e.code,
+            "error_type": "HTTPError",
+            "details": error_body
+        }
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        return {
+            "success": False,
+            "status_code": 500,
+            "error_type": "UnexpectedException",
+            "details": str(e)
+        }
 
 if __name__ == "__main__":
     print("Agent Tools Loaded.")

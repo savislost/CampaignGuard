@@ -29,6 +29,7 @@ def update_github_gist(gist_id: str, github_token: str, new_link: str) -> dict:
     headers = {
         "Accept": "application/vnd.github+json",
         "Authorization": f"Bearer {github_token}",
+        "Content-Type": "application/json",
         "X-GitHub-Api-Version": "2022-11-28",
         "User-Agent": "CampaignGuard-Agent"
     }

@@ -1,5 +1,6 @@
 import urllib.request
 import urllib.error
+import json
 import re
 
 def verify_link_health(url: str) -> dict:
@@ -13,7 +14,7 @@ def verify_link_health(url: str) -> dict:
     except Exception as e:
         return {"status_code": 500, "reachable": False, "error": str(e)}
 
-def create_short_link(destination_url: str, custom_slug: str = "campaign-link") -> dict:
+def create_short_link(destination_url: str, custom_slug: str = "campaign") -> dict:
     """Generates a sanitized campaign short URL."""
     sanitized_slug = re.sub(r'[^a-zA-Z0-9-_]', '', custom_slug)
     return {
@@ -22,11 +23,48 @@ def create_short_link(destination_url: str, custom_slug: str = "campaign-link") 
         "slug": sanitized_slug
     }
 
-def update_social_bio(platform: str, profile_id: str, new_link: str) -> dict:
-    """Simulates updating a live social media bio link."""
-    return {"success": True, "platform": platform, "profile_id": profile_id, "new_bio_link": new_link}
+def update_github_gist(gist_id: str, github_token: str, new_link: str) -> dict:
+    """IRREVERSIBLE ACTION: Updates a live public GitHub Gist with the new campaign link."""
+    api_url = f"https://api.github.com/gists/{gist_id}"
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {github_token}",
+        "Content-Type": "application/json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "CampaignGuard-Agent"
+    }
+    data = {
+        "description": "Active Campaign Link",
+        "files": {
+            "campaign_link.txt": {"content": f"Live Campaign URL: {new_link}"}
+        }
+    }
+    
+    req = urllib.request.Request(api_url, data=json.dumps(data).encode('utf-8'), headers=headers, method='PATCH')
+    try:
+        with urllib.request.urlopen(req, timeout=10) as response:
+            status = response.getcode()
+            return {
+                "success": status == 200,
+                "status_code": status,
+                "gist_id": gist_id,
+                "message": "Live Gist overwritten successfully."
+            }
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode('utf-8', errors='ignore')
+        return {
+            "success": False,
+            "status_code": e.code,
+            "error_type": "HTTPError",
+            "details": error_body
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "status_code": 500,
+            "error_type": "UnexpectedException",
+            "details": str(e)
+        }
 
 if __name__ == "__main__":
-    sample = "https://example.com"
-    print("Health check:", verify_link_health(sample))
-    print("Short link:", create_short_link(sample, "my-promo"))
+    print("Agent Tools Loaded.")

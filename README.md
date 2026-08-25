@@ -37,7 +37,7 @@ python3 test_link_manager.py
 
 ## Qodo Code Review Evidence
 
-- **Representative Pull Request:** [PR #1 - Real GitHub Gist PATCH Integration](https://github.com/savislost/social-media-manager/pull/1) *(replace with your actual merged PR link)*
+- **Representative Pull Request:** [PR #1 - Real GitHub Gist PATCH Integration]((https://github.com/savislost/social-media-manager/pull/4)
 - **Key Findings & Actions:**
   - **High Severity (Missing Content-Type Header):** Qodo identified that the raw `urllib` PATCH request lacked `'Content-Type': 'application/json'`, causing GitHub to reject payloads. We resolved this by explicitly configuring headers.
   - **High Severity (Broken Test Import):** Qodo flagged that `test_link_manager.py` still imported the deprecated `update_social_bio` function. We refactored the test suite to validate the live `update_github_gist` endpoint and error payloads.

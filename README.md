@@ -1,4 +1,4 @@
-# CampaignGuard 
+# Campaign Guard 
 > Autonomous Campaign & Link Infrastructure Agent with Human-in-the-Loop Safety Gates.
 
 CampaignGuard prevents broken marketing links, dead destination pages (404s), and unauthorized production overwrites by combining sandboxed URL validation with an explicit human approval gate powered by TrueForge.

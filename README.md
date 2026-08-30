@@ -1,11 +1,11 @@
-# CampaignGuard 🛡️
+# CampaignGuard 
 > Autonomous Campaign & Link Infrastructure Agent with Human-in-the-Loop Safety Gates.
 
 CampaignGuard prevents broken marketing links, dead destination pages (404s), and unauthorized production overwrites by combining sandboxed URL validation with an explicit human approval gate powered by TrueForge.
 
 ---
 
-## ⚡ Core Features
+##  Core Features
 - **Sandbox URL Health Checks:** Validates target URLs for HTTP 200 OK and response reachability.
 - **Sanitized Short Link Generation:** Creates slug-safe promotional short URLs.
 - **Live Production Writes:** Updates public GitHub Gist endpoints via authenticated REST APIs.
@@ -14,13 +14,13 @@ CampaignGuard prevents broken marketing links, dead destination pages (404s), an
 
 ---
 
-## 🏗️ Architecture Flow
+##  Architecture Flow
 
 User Prompt -> Gemini Flash -> TrueForge Sandbox (link_manager.py) -> Safety Gate (Human Approval) -> Live Production Gist Update
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js v22+
